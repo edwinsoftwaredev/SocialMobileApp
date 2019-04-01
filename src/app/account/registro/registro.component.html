@@ -1,0 +1,83 @@
+<GridLayout rows="*, auto, *" style="background-color: #3d5afe; color: white;">
+    <StackLayout row="1" class="form m-x-15 p-15" style="background-color: white;" borderRadius="5">
+        <!-- Option 4: An input with a simple border and no label -->
+        <Label style="color: #3d5afe" class="text-center p-b-5 h1" text="Social"></Label>
+        <Label style="color: lightgray;" text="Registro" class="text-center p-b-20 h3"></Label>
+        <RadDataForm tkExampleTitle tkToggleNavButton [source]="registerAccount"
+                     #dataForm
+                     (propertyCommitted)="validarForm($event)"
+                     style="color: black;"
+                     commitMode="Immediate">
+            <TKEntityProperty tkDataFormProperty
+                              name="login"
+                              imageResource="res://baseline_person_24"
+                              displayName="User"
+                              index="0">
+                <TKNonEmptyValidator tkEntityPropertyValidators
+                                     errorMessage="*Obligatorio."></TKNonEmptyValidator>
+                <TKMaximumLengthValidator tkEntityPropertyValidators
+                                          errorMessage="User no puede ser mayor de 50 caracteres."
+                                          length="50"></TKMaximumLengthValidator>
+                <TKRegExValidator tkEntityPropertyValidators
+                                  regEx="^[_.@A-Za-z0-9]*$"
+                                  errorMessage="User solo pude contener estos caracteres: '_', '.', letras y digitos"></TKRegExValidator>
+                <TKPropertyEditor tkEntityPropertyEditor type="Text"></TKPropertyEditor>
+            </TKEntityProperty>
+
+            <TKEntityProperty tkDataFormProperty
+                              name="email"
+                              imageResource="res://baseline_contact_mail_24"
+                              displayName="Email"
+                              index="1">
+                <TKNonEmptyValidator tkEntityPropertyValidators
+                                     errorMessage="*Obligatorio."></TKNonEmptyValidator>
+                <TKMaximumLengthValidator tkEntityPropertyValidators
+                                          errorMessage="Email no puede ser mayor de 50 caracteres."
+                                          length="50"></TKMaximumLengthValidator>
+                <TKEmailValidator tkEntityPropertyValidators></TKEmailValidator>
+                <TKPropertyEditor tkEntityPropertyEditor type="Email"></TKPropertyEditor>
+            </TKEntityProperty>
+
+            <TKEntityProperty tkDataFormProperty
+                              name="password"
+                              imageResource="res://baseline_vpn_key_24"
+                              displayName="Password"
+                              index="2">
+                <TKNonEmptyValidator tkEntityPropertyValidators
+                                     errorMessage="*Obligatorio."></TKNonEmptyValidator>
+                <TKMinimumLengthValidator tkEntityPropertyValidators
+                                          errorMessage="Password debe tener por lo menos 4 caracteres."
+                                          length="4"></TKMinimumLengthValidator>
+                <TKMaximumLengthValidator tkEntityPropertyValidators
+                                          errorMessage="Password no puede ser mayor de 50 caracteres."
+                                          length="50"></TKMaximumLengthValidator>
+                <TKPropertyEditor tkEntityPropertyEditor type="Password"></TKPropertyEditor>
+            </TKEntityProperty>
+
+            <TKEntityProperty tkDataFormProperty
+                              name="confirmPassword"
+                              imageResource="res://baseline_vpn_key_24"
+                              displayName="Confirm Password"
+                              index="3">
+                <TKNonEmptyValidator tkEntityPropertyValidators
+                                     errorMessage="*Obligatorio."></TKNonEmptyValidator>
+                <TKMinimumLengthValidator tkEntityPropertyValidators
+                                          errorMessage="Confirm Password debe tener por lo menos 4 caracteres."
+                                          length="4"></TKMinimumLengthValidator>
+                <TKMaximumLengthValidator tkEntityPropertyValidators
+                                          errorMessage="Confirm Password no puede ser mayor de 50 caracteres."
+                                          length="50"></TKMaximumLengthValidator>
+                <TKPropertyEditor tkEntityPropertyEditor type="Password"></TKPropertyEditor>
+            </TKEntityProperty>
+
+        </RadDataForm>
+        <GridLayout columns="*, *" orientation="horizontal" class="m-t-15">
+            <Button col="0" class="btn btn-outline text-capitalize font-weight-bold" text="Cancelar" (tap)="onNavItemTap('/login')"></Button>
+            <Button [isEnabled]="formValidacion" col="1" class="btn btn-primary btn-active text-capitalize font-weight-bold" text="Registrarte" (tap)="register()"></Button>
+        </GridLayout>
+    </StackLayout>
+</GridLayout>
+
+
+
+

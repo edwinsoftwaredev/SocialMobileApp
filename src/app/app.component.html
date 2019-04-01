@@ -1,0 +1,80 @@
+<!--
+RadSideDrawer is a UI component part of the Progress NativeScript UI set of components.
+Learn more about the RadSideDrawer UI component and how it can be customized in this documentation article:
+http://docs.telerik.com/devtools/nativescript-ui/Controls/NativeScript/SideDrawer/getting-started
+-->
+<!--Cambios a este componente deberan ser programaticos.
+    Evitar el uso de directivas de cambio de estilo de Angular.
+    Ver comentarios respecto a los cambios que se realizaron a este componente
+-->
+<RadSideDrawer>
+    <GridLayout tkDrawerContent rows="auto, *" class="sidedrawer sidedrawer-left">
+        <StackLayout row="0" class="sidedrawer-header m-t-25" *ngIf="usuario !== null">
+            <Image class="postProfilePic m-b-5"
+                   stretch="aspectFill"
+                   verticalAlignment="center"
+                   horizontalAlignment="left"
+                   style="height: 80; width: 80;"
+                   [src]="picUrl"></Image>
+            <Label class="sidedrawer-header-brand" style="font-size: 16;" text="{{usuario.primerNombre + ' ' + usuario.primerApellido}}"></Label>
+            <Label class="footnote" style="font-size: 16;" text="{{usuario.usuario}}"></Label>
+        </StackLayout>
+    
+        <ScrollView row="1">
+            <StackLayout class="sidedrawer-content">
+                <GridLayout id="inicioItem" columns="auto, *" class="sidedrawer-list-item" (tap)="onNavItemTap('/muro', $event)">
+                    <StackLayout verticalAlignment="center" class="p-l-10 p-r-30">
+                        <Label color="#708090" backgroundColor="#d3d3d3" col="0" borderRadius="100" borderColor="gray" borderWidth="1" text="&#xe88a;" style="font-size: 24;" class="material-icons p-5"></Label>
+                    </StackLayout>
+                    <Label  col="1" text="Inicio" style="font-size: 14; color: #708090;"; class="p-l-10 p-r-10 font-weight-bold"></Label>
+                </GridLayout>
+
+                <GridLayout columns="auto, *" class="sidedrawer-list-item" (tap)="onNavItemTap('/listado-chats', $event)">
+                    <StackLayout verticalAlignment="center" class="p-l-10 p-r-30">
+                        <Label color="#708090" backgroundColor="#d3d3d3" col="0" borderRadius="100" borderColor="gray" borderWidth="1" text="&#xe0bf;" style="font-size: 24;" class="material-icons p-5"></Label>
+                    </StackLayout>
+                    <Label col="1" text="Chats" style="font-size: 14; color: #708090;" class="p-l-10 p-r-10 font-weight-bold"></Label>
+                </GridLayout>
+
+                <GridLayout columns="auto, *" class="sidedrawer-list-item" (tap)="onNavItemTap('/amigos', $event)">
+                    <StackLayout verticalAlignment="center" class="p-l-10 p-r-30">
+                        <Label color="#708090" backgroundColor="#d3d3d3" col="0" borderRadius="100" borderColor="gray" borderWidth="1" text="&#xe7fb;" style="font-size: 24;" class="material-icons p-5"></Label>
+                    </StackLayout>
+                    <Label col="1" text="Amigos" style="font-size: 14; color: #708090;" class="p-l-10 p-r-10 font-weight-bold"></Label>
+                </GridLayout>
+
+                <GridLayout columns="auto, *" class="sidedrawer-list-item" (tap)="onNavItemTap('/solicitudes', $event)">
+                    <StackLayout verticalAlignment="center" class="p-l-10 p-r-30">
+                        <Label color="#708090" backgroundColor="#d3d3d3" col="0" borderRadius="100" borderColor="gray" borderWidth="1" text="&#xe7fc;" style="font-size: 24;" class="material-icons p-5"></Label>
+                    </StackLayout>
+                    <Label col="1" text="Solicitudes" style="font-size: 14; color: #708090;" class="p-l-10 p-r-10 font-weight-bold"></Label>
+                </GridLayout>
+
+                <GridLayout columns="auto, *" class="sidedrawer-list-item" (tap)="onNavItemTap('/search', $event)">
+                    <StackLayout verticalAlignment="center" class="p-l-10 p-r-30">
+                        <Label color="#708090" backgroundColor="#d3d3d3" col="0" borderRadius="100" borderColor="gray" borderWidth="1" text="&#xe8b6;" style="font-size: 24;" class="material-icons p-5"></Label>
+                    </StackLayout>
+                    <Label col="1" text="Buscar" style="font-size: 14; color: #708090;" class="p-l-10 p-r-10 font-weight-bold"></Label>
+                </GridLayout>
+
+                <GridLayout columns="auto, *" class="sidedrawer-list-item" (tap)="onNavItemTap('/profile-details-form', $event)">
+                    <StackLayout verticalAlignment="center" class="p-l-10 p-r-30">
+                        <Label color="#708090" backgroundColor="#d3d3d3" col="0" borderRadius="100" borderColor="gray" borderWidth="1" text="&#xe3c9;" style="font-size: 24;" class="material-icons p-5"></Label>
+                    </StackLayout>
+                    <Label col="1" text="Editar Perfil" style="font-size: 14; color: #708090;" class="p-l-10 p-r-10 font-weight-bold"></Label>
+                </GridLayout>
+    
+                <StackLayout id="separador" class="hr-light"></StackLayout>
+
+                <GridLayout columns="auto, *" class="sidedrawer-list-item" (tap)="onNavItemTap('/settings', $event)">
+                    <StackLayout verticalAlignment="center" class="p-l-10 p-r-30">
+                        <Label color="#708090" backgroundColor="#d3d3d3" col="0" borderRadius="100" borderColor="gray" borderWidth="1" text="&#xe8b8;" style="font-size: 24;" class="material-icons p-5"></Label>
+                    </StackLayout>
+                    <Label col="1" text="Opciones" style="font-size: 14; color: #708090;" class="p-l-10 p-r-10 font-weight-bold"></Label>
+                </GridLayout>
+            </StackLayout>
+        </ScrollView>
+    </GridLayout>
+
+    <page-router-outlet tkMainContent class="page page-content"></page-router-outlet>
+</RadSideDrawer>

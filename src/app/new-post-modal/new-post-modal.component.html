@@ -1,0 +1,89 @@
+<ActionBar title="Crea tu Post" class="action-bar">
+
+    <NavigationButton android.systemIcon="ic_menu_back" text="Back to ActionBar" (tap)="onClose()"></NavigationButton>
+
+    <GridLayout rows="auto" columns="auto,*,auto">
+        <!--<Label col="0"
+            verticalAlignment="center"
+            textAlignment="center"
+            class="action-bar-title material-icons p-r-15"
+            fontSize="25"
+            text="&#xe5c4;" (tap)="onClose()"></Label>-->
+        <Label col="0"
+               verticalAlignment="center"
+               textAlignment="center"
+               class="action-bar-title"
+               text="Crea tu Post">
+        </Label>
+        <Button class="btn btn-primary btn-active text-capitalize font-weight-bold" [disabled]="texto === '' && url === '' && imagePreview === null" col="2" text="Post" (tap)="savePost()"></Button>
+    </GridLayout>
+
+</ActionBar>
+
+<GridLayout rows="*, auto" columns="*" style="background-color: lightgray">
+
+    <GridLayout rows="*" columns="*" style="background-color: lightgray;" row="0" col="0" class="m-10 form">
+        <TextView [(ngModel)]="texto"
+                  fontSize="16"
+                  autocorrect="true"
+                  backgroundColor="white"
+                  style="height: 100%;"
+                  verticalAlignment="center"
+                  row="0"
+                  col="0"
+                  hint="Que dirá tu Post..."
+                  [editable]="true"
+                  class="input input-border"></TextView>
+    </GridLayout>
+
+    <!--<StackLayout style="background-color: lightgray;" row="1" col="0" class="m-10 form">
+        <TextView backgroundColor="white"
+                  verticalAlignment="center"
+                  [(ngModel)]="url"
+                  hint="URL..."
+                  keyboardType="url"
+                  [editable]="true"
+                  class="input input-border"></TextView>
+    </StackLayout>-->
+
+    <GridLayout backgroundColor="white"
+                borderRadius="1"
+                height="170"
+                col="0"
+                row="1"
+                rows="auto"
+                columns="*"
+                class="p-10 m-10">
+        <GridLayout row="0" columns="auto, * , auto">
+
+            <StackLayout row="0"
+                         col="1"
+                         [visibility]="imagePreview ? 'visible' : 'collapsed'">
+                <Image height="100"
+                       style="border-radius: 25;"
+                       class="m-t-15"
+                       [src]="imagePreview"
+                       (tap)="seleccionarArchivos()"></Image>
+                <Label horizontalAlignment="center"
+                       style="color: lightgray;"
+                       text="Toca la imagen para cambiarla."></Label>
+            </StackLayout>
+
+            <StackLayout row="0"
+                         col="1"
+                         [visibility]="!imagePreview ? 'visible' : 'collapsed'">
+                <Label (tap)="seleccionarArchivos()"
+                       fontSize="100"
+                       verticalAlignment="center"
+                       horizontalAlignment="center"
+                       text="&#xe251;"
+                       style="color: forestgreen"
+                       class="material-icons m-t-15"></Label>
+                <Label horizontalAlignment="center"
+                       style="color: lightgray;"
+                       text="Toca la imagen para agregar una al post."></Label>
+            </StackLayout>
+        </GridLayout>
+    </GridLayout>
+
+</GridLayout>

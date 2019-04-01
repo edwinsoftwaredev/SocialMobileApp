@@ -1,0 +1,67 @@
+{
+    "nativescript": {
+        "id": "com.edwinmartinezpaz.socialproject",
+        "tns-ios": {
+            "version": "5.2.0"
+        },
+        "tns-android": {
+            "version": "5.2.1"
+        }
+    },
+    "description": "NativeScript Application",
+    "license": "SEE LICENSE IN <your-license-filename>",
+    "repository": "<fill-your-repository-here>",
+    "scripts": {
+        "lint": "tslint \"src/**/*.ts\""
+    },
+    "dependencies": {
+        "@angular/animations": "~7.2.0",
+        "@angular/common": "~7.2.0",
+        "@angular/compiler": "~7.2.0",
+        "@angular/core": "~7.2.0",
+        "@angular/forms": "~7.2.0",
+        "@angular/http": "~7.2.0",
+        "@angular/platform-browser": "~7.2.0",
+        "@angular/platform-browser-dynamic": "~7.2.0",
+        "@angular/router": "~7.2.0",
+        "@ng-bootstrap/ng-bootstrap": "^4.0.3",
+        "blueimp-canvas-to-blob": "^3.14.0",
+        "moment": "^2.24.0",
+        "nativescript-angular": "^7.2.3",
+        "nativescript-bitmap-factory": "^1.7.1",
+        "nativescript-feedback": "^1.3.7",
+        "nativescript-imagepicker": "^6.1.0",
+        "nativescript-loading-indicator": "^2.4.0",
+        "nativescript-ng-shadow": "^2.1.0",
+        "nativescript-ngx-fonticon": "^4.2.0",
+        "nativescript-nodeify": "^0.8.0",
+        "nativescript-plugin-firebase": "^8.0.0",
+        "nativescript-secure-storage": "^2.4.0",
+        "nativescript-theme-core": "~1.0.4",
+        "nativescript-ui-autocomplete": "^3.11.0",
+        "nativescript-ui-dataform": "^3.10.0",
+        "nativescript-ui-listview": "^5.2.0",
+        "nativescript-ui-sidedrawer": "~5.1.0",
+        "nativescript-websockets": "^1.5.3",
+        "reflect-metadata": "~0.1.12",
+        "rxjs": "~6.3.0",
+        "sockjs-client": "^1.3.0",
+        "stompjs": "^2.3.3",
+        "tns-core-modules": "^5.2.2",
+        "typescript-base64-arraybuffer": "^0.1.0",
+        "zone.js": "~0.8.26"
+    },
+    "devDependencies": {
+        "@angular/compiler-cli": "~7.1.0",
+        "@nativescript/schematics": "~0.5.0",
+        "@ngtools/webpack": "~7.1.0",
+        "codelyzer": "~4.5.0",
+        "nativescript-dev-sass": "~1.6.0",
+        "nativescript-dev-typescript": "^0.9.0",
+        "nativescript-dev-webpack": "~0.20.0",
+        "tns-platform-declarations": "^5.2.2",
+        "tslint": "~5.11.0"
+    },
+    "gitHead": "59b6da006346fedb5bb201fcc9cd7d204a69a82f",
+    "readme": "NativeScript Application"
+}

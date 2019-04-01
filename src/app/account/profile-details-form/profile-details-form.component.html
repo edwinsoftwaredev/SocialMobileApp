@@ -1,0 +1,107 @@
+<!--<ActionBar class="action-bar">
+    <GridLayout rows="*" columns="*, auto">
+        <Button row="0"
+                col="1"
+                class="material-icons btn btn-primary"
+                style="background-color: whitesmoke;"
+                text="&#xe566;"
+                (tap)="logOut()"></Button>
+    </GridLayout>
+</ActionBar>-->
+
+<ScrollView orientation="vertical" style="background-color: #3d5afe;" class="p-y-25">
+    <GridLayout rows="*, auto, *" style="background-color: #3d5afe; color: white;" class="p-y-15">
+        <StackLayout row="1" class="form m-x-15 p-15 m-y-30" style="background-color: white;" borderRadius="5">
+            <!-- Option 4: An input with a simple border and no label -->
+            <Label style="color: #3d5afe" class="text-center p-b-5 h1" text="Social"></Label>
+            <Label style="color: lightgray;" text="Editar Perfil" class="text-center p-b-20 h3"></Label>
+
+            <GridLayout rows="auto" columns="*, auto, *" class="m-y-15">
+                <Image *ngIf="profilePicUrl"
+                       col="1"
+                       row="0"
+                       borderWidth="4"
+                       borderColor="#1e90ff"
+                       backgroundColor="gray"
+                       class="profilePicEdit m-b-15"
+                       [src]="profilePicUrl"
+                       (tap)="seleccionarImagenPerfil()"
+                ></Image>
+                <Image *ngIf="!profilePicUrl"
+                       col="1"
+                       borderWidth="4"
+                       borderColor="#1e90ff"
+                       backgroundColor="gray"
+                       row="0"
+                       class="profilePicEdit m-b-15"
+                       style="background-image: url('res://default_profile_pic');"
+                       (tap)="seleccionarImagenPerfil()"></Image>
+            </GridLayout>
+
+            <RadDataForm tkExampleTitle tkToggleNavButton [source]="usuarioForm"
+                         #dataForm
+                         (propertyCommitted)="validarForm($event)"
+                         style="color: black;"
+                         commitMode="Immediate">
+                <TKEntityProperty tkDataFormProperty
+                                  name="primerNombre"
+                                  imageResource="res://baseline_person_outline_24"
+                                  displayName="Primer Nombre"
+                                  index="0">
+                    <TKNonEmptyValidator tkEntityPropertyValidators
+                                         errorMessage="*Obligatorio."></TKNonEmptyValidator>
+                    <TKPropertyEditor tkEntityPropertyEditor type="Text"></TKPropertyEditor>
+                </TKEntityProperty>
+
+                <TKEntityProperty tkDataFormProperty
+                                  name="segundoNombre"
+                                  imageResource="res://baseline_person_outline_24"
+                                  displayName="Segundo Nombre"
+                                  index="1">
+                    <TKPropertyEditor tkEntityPropertyEditor type="Text"></TKPropertyEditor>
+                </TKEntityProperty>
+
+                <TKEntityProperty tkDataFormProperty
+                                  name="primerApellido"
+                                  imageResource="res://baseline_person_outline_24"
+                                  displayName="Primer Apellido"
+                                  index="2">
+                    <TKNonEmptyValidator tkEntityPropertyValidators
+                                         errorMessage="*Obligatorio."></TKNonEmptyValidator>
+                    <TKPropertyEditor tkEntityPropertyEditor type="Text"></TKPropertyEditor>
+                </TKEntityProperty>
+
+                <TKEntityProperty tkDataFormProperty
+                                  name="segundoApellido"
+                                  imageResource="res://baseline_person_outline_24"
+                                  displayName="Segundo Apellido"
+                                  index="3">
+                    <TKPropertyEditor tkEntityPropertyEditor type="Text"></TKPropertyEditor>
+                </TKEntityProperty>
+
+                <TKEntityProperty tkDataFormProperty
+                                  name="fechaNacimiento"
+                                  imageResource="res://baseline_cake_24"
+                                  displayName="Fecha de Nacimiento"
+                                  index="4">
+                    <TKPropertyEditor tkEntityPropertyEditor type="DatePicker"></TKPropertyEditor>
+                </TKEntityProperty>
+
+            </RadDataForm>
+            <GridLayout columns="*, *" orientation="horizontal" class="m-t-15">
+                <Button col="0" class="btn btn-outline btn-rounded-lg text-capitalize font-weight-bold" text="Cancelar" (tap)="cancelar()"></Button>
+                <Button [isEnabled]="formValidacion" col="1" class="btn btn-rounded-lg btn-primary btn-active text-capitalize font-weight-bold" text="Guardar" (tap)="guardarPerfil()"></Button>
+            </GridLayout>
+            <StackLayout class="hr-light"></StackLayout>
+            <GridLayout columns="*" rows="*" class="m-t-10">
+                <Button class="btn btn-outline btn-rounded-lg text-capitalize font-weight-bold"
+                        col="0"
+                        style="background-color: orangered; color: white; border-color: red;"
+                        *ngIf="usuarioExiste"
+                        (tap)="deleteProfile()"
+                        text="Eliminar Perfil"></Button>
+            </GridLayout>
+        </StackLayout>
+    </GridLayout>
+</ScrollView>
+

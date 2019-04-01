@@ -1,0 +1,96 @@
+<ActionBar class="action-bar">
+    <!--
+    Use the NavigationButton as a side-drawer button in Android
+    because ActionItems are shown on the right side of the ActionBar
+    -->
+    <!--<NavigationButton
+            ios:visibility="collapsed"
+            icon="res://menu"
+            (tap)="onDrawerButtonTap()"></NavigationButton>-->
+    <!--
+    Use the ActionItem for IOS with position set to left. Using the
+    NavigationButton as a side-drawer button in iOS is not possible,
+    because its function is to always navigate back in the application.
+    -->
+    <!--<ActionItem icon="res://navigation/menu"
+                android:visibility="collapsed"
+                (tap)="onDrawerButtonTap()"
+                ios.position="left">
+    </ActionItem>-->
+
+    <NavigationButton android.systemIcon="ic_menu_back" (tap)="goBack()"></NavigationButton>
+
+    <GridLayout rows="*" columns="auto, *">
+        <Label col="0" verticalAlignment="center" textAlignment="center" class="action-bar-title p-l-5" text="Chats"></Label>
+    </GridLayout>
+
+</ActionBar>
+
+<GridLayout [visibility]="usuario ? 'visible' : 'collapsed'" style="background-color: lightgray;">
+    <ActivityIndicator [busy]="searchingSpinnerFlag"
+                       width="60" height="60"
+                       class="activity-indicator p-b-30"></ActivityIndicator>
+    <RadListView #searchListView
+                 class="list-group m-x-0"
+                 [items]="usuariosChat">
+        <ng-template tkListItemTemplate let-chat1="item" class="p-0 m-b-2">
+            <StackLayout>
+                <StackLayout *ngFor="let usuario1 of chat1.usuarios">
+                    <StackLayout *ngIf="usuario1.usuario !== usuario.usuario" class="p-x-0 m-x-0" style="background-color: white">
+                        <StackLayout class="m-t-0"></StackLayout>
+                        <GridLayout class="list-group-item p-x-0 p-y-5" rows="auto" columns="auto, *">
+                            <StackLayout width="85" col="0" row="0" verticalAlignment="center">
+                                <Image class="postProfilePic"
+                                       stretch="aspectFill"
+                                       [ngClass]="{'usuarioConectado': chat1.status}"
+                                       verticalAlignment="center"
+                                       horizontalAlignment="center"
+                                       style="height: 80; width: 80;"
+                                       [src]="usuario1.profilePic"></Image>
+                            </StackLayout>
+                            <StackLayout row="0" col="1" verticalAlignment="center">
+                                <Label [text]="usuario1.primerNombre + ' ' + usuario1.primerApellido"
+                                       style="padding-left: 8"
+                                       fontSize="16"
+                                       verticalAlignment="center"></Label>
+                                <GridLayout rows="auto" columns="auto, auto, auto, *" verticalAlignment="center">
+                                    <Button row="0"
+                                            verticalAlignment="center"
+                                            col="0"
+                                            width="36"
+                                            style="margin-left: 5; margin-right: 5; font-size: 20;"
+                                            text="&#xe0bf;"
+                                            (tap)="abrirChat(chat1, usuario1)"
+                                            class="btn btn-primary btn-active btn-rounded-lg font-weight-bold p-x-0 material-icons">
+                                    </Button>
+                                    <Button row="0"
+                                            verticalAlignment="center"
+                                            col="1"
+                                            width="36"
+                                            style="margin-left: 0; font-size: 20;"
+                                            isUserInteractionEnabled="false"
+                                            backgroundColor="white"
+                                            borderColor="white"
+                                            color="#ff4500"
+                                            isEnabled="false"
+                                            *ngIf="usuariosSinLeer.indexOf(usuario1.usuario) !== -1"
+                                            text="&#xe0c9;"
+                                            class="btn btn-outline btn-rounded-lg font-weight-bold p-x-0 material-icons"></Button>
+                                    <Button row="0"
+                                            col="2"
+                                            verticalAlignment="center"
+                                            text="Eliminar"
+                                            *ngIf="chat1.id"
+                                            (tap)="eliminarChat(chat1)"
+                                            class="btn btn-primary btn-outline btn-active btn-rounded-lg text-capitalize font-weight-bold"
+                                            width="130"></Button>
+                                </GridLayout>
+                            </StackLayout>
+                        </GridLayout>
+                        <StackLayout class="hr-light m-b-0"></StackLayout>->
+                    </StackLayout>
+                </StackLayout>
+            </StackLayout>
+        </ng-template>
+    </RadListView>
+</GridLayout>

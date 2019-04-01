@@ -1,0 +1,36 @@
+<!--Esta barra tiene que desaparecer-->
+<ActionBar class="action-bar">
+    <!--
+    Use the NavigationButton as a side-drawer button in Android
+    because ActionItems are shown on the right side of the ActionBar
+    -->
+    <NavigationButton ios:visibility="collapsed" icon="res://menu" (tap)="onDrawerButtonTap()"></NavigationButton>
+    <!--
+    Use the ActionItem for IOS with position set to left. Using the
+    NavigationButton as a side-drawer button in iOS is not possible,
+    because its function is to always navigate back in the application.
+    -->
+    <ActionItem icon="res://navigation/menu" android:visibility="collapsed" (tap)="onDrawerButtonTap()"
+        ios.position="left">
+    </ActionItem>
+    <Label class="action-bar-title" text="Home"></Label>
+</ActionBar>
+
+<GridLayout rows="*, auto" class="page page-content" style="background-color: #006968; color: white;">
+    <!--<Label class="page-icon material-icons" text="&#xe88a;"></Label>
+    <Label class="page-placeholder" text="Page content goes here "></Label>-->
+
+    <GridLayout row="0" rows="*, auto, *">
+        <Label row="1" style="background-color: white; color: #006968; font-weight: bold;"
+               class="h1 text-center m-x-30 p-y-20"
+               text="Social"
+               borderRadius="5"></Label>
+    </GridLayout>
+
+    <GridLayout row="1" columns="*, auto, *">
+        <StackLayout col="1" class="m-b-30" style="width: 75%;">
+            <Button class="btn btn-primary btn-active btn-rounded-sm" id="btnLogIn" text="Iniciar Sesión" (tap)="onNavItemTap('/login')"></Button>
+            <Button class="btn btn-primary btn-active btn-rounded-sm" id="btnRegister" text="Registrarte"></Button>
+        </StackLayout>
+    </GridLayout>
+</GridLayout>

@@ -1,0 +1,179 @@
+<ActionBar class="action-bar">
+    <!--
+    Use the NavigationButton as a side-drawer button in Android
+    because ActionItems are shown on the right side of the ActionBar
+    -->
+    <NavigationButton ios:visibility="collapsed" icon="res://menu" (tap)="onDrawerButtonTap()"></NavigationButton>
+    <!--
+    Use the ActionItem for IOS with position set to left. Using the
+    NavigationButton as a side-drawer button in iOS is not possible,
+    because its function is to always navigate back in the application.
+    -->
+    <ActionItem icon="res://navigation/menu" android:visibility="collapsed" (tap)="onDrawerButtonTap()"
+                ios.position="left">
+    </ActionItem>
+
+    <!--Menu Pop Up para android-->
+    <GridLayout rows="*" columns="auto, *, auto">
+        <Label col="0" verticalAlignment="center" textAlignment="center" class="action-bar-title p-l-5" text="Inicio"></Label>
+        <Label class="material-icons p-r-15 h2"
+               color="white"
+               verticalAlignment="center"
+               [visibility]="isAndroid ? 'visible' : 'collapsed'"
+               text="&#xe5d4;"
+               (tap)="popMenu($event)"
+               android.position="popup"
+               row="0"
+               col="2"></Label>
+        <Label [visibility]="!isAndroid ? 'visible' : 'collapsed'"
+               color="white"
+               verticalAlignment="center"
+               class="material-icons p-r-15 h2"
+               text="&#xe5d4;"
+               (tap)="popMenuIOS($event)"
+               row="0"
+               col="2"></Label>
+    </GridLayout>
+
+</ActionBar>
+
+<GridLayout [visibility]="usuario ? 'visible' : 'collapsed'" style="background-color: lightgray;">
+    <ActivityIndicator [busy]="activityIndicator"
+                       width="50" height="50"
+                       color="#1e90ff"
+                       class="activity-indicator"></ActivityIndicator>
+    <StackLayout *ngIf="!hayPostFlag && !activityIndicator"
+                 horizontalAlignment="center"
+                 verticalAlignment="top"
+                 class="p-x-10 m-t-5 w-full h-100">
+        <GridLayout backgroundColor="white"
+                    borderRadius="5">
+            <Label  verticalAlignment="center"
+                    horizontalAlignment="center"
+                    textAlignment="center"
+                    color="gray"
+                    fontSize="20"
+                    class="font-weight-bold"
+                    text="No hay Posts..."></Label>
+        </GridLayout>
+    </StackLayout>
+    <RadListView #muroListView
+                 class="list-group m-x-10"
+                 *ngIf="!activityIndicator"
+                 [items]="fullPosts"
+                 [itemTemplateSelector]="templateSelector"
+                 loadOnDemandMode="Auto"
+                 (loadMoreDataRequested)="onLoadMoreItemsRequested($event)"
+                 pullToRefresh="true"
+                 (pullToRefreshInitiated)="onPullToRefreshInitiated($event)">
+        <ListViewLinearLayout #myListViewLinearLayout tkListViewLayout scrollDirection="Vertical" [itemInsertAnimation]="itemInsertAnimation" [itemDeleteAnimation]="itemDeleteAnimation"></ListViewLinearLayout>
+        <ng-template tkTemplateKey="big" tkListItemTemplate let-post="item" class="p-0 m-b-15">
+            <StackLayout>
+                <StackLayout class="m-t-5"></StackLayout>
+
+                <GridLayout class="list-group-item" rows="*,auto,auto,auto,auto,auto" borderRadius="5" backgroundColor="white" style="padding: 0px;">
+
+                    <Image row="0"
+                           borderTopLeftRadius="5"
+                           borderTopRightRadius="5"
+                           loadMode="async"
+                           stretch="aspectFill"
+                           [src]="post.postImages[0].imageSource"></Image>
+                    <!--<Image row="0" borderTopLeftRadius="5" borderTopRightRadius="5" *ngFor="let file of post.postImages" class="w-full" [src]="file.sanitizedUrl"></Image>-->
+
+                    <StackLayout row="1" style="padding: 10;">
+                        <GridLayout columns="auto, *">
+                            <Image col="0" class="postProfilePic" stretch="aspectFill" [src]="post.profilePicSanitized"></Image>
+                            <StackLayout class="m-l-5" col="1" rows="auto, auto" verticalAlignment="center">
+                                <Label fontSize="16" row="0" textWrap="true" [text]="post.sourcePost.usuario.primerNombre + ' ' + post.sourcePost.usuario.primerApellido"></Label>
+                                <Label fontSize="14" style="color: gray;" row="1" textWrap="true" [text]="post.fechaPublicacionPost"></Label>
+                            </StackLayout>
+                        </GridLayout>
+                    </StackLayout>
+                    <StackLayout row="2" class="m-t-10"></StackLayout>
+                    <Label fontSize="14" class="p-x-15 p-y-5" row="3" textWrap="true" [text]="post.sourcePost.texto"></Label>
+                    <StackLayout row="4" class="hr-light m-5"></StackLayout>
+                    <GridLayout row="5" rows="auto" columns="auto, *, auto">
+                        <GridLayout row="0"
+                                    columns="auto, auto"
+                                    col="0"
+                                    class="p-15"
+                                    [isUserInteractionEnabled]="!loadingLikeFlag"
+                                    [visibility]="validateLike(post.sourcePost.likes) ? 'visible' : 'collapsed'"
+                                    (tap)="setLike(post)">
+                            <Label color="#a9a9a9" col="0" verticalAlignment="center" fontSize="20" text="&#xe8dc;" class="material-icons"></Label>
+                            <Label color="#a9a9a9" col="1" verticalAlignment="center" fontSize="20" [text]="' ' + post.sourcePost.likes.length"></Label>
+                        </GridLayout>
+                        <GridLayout row="0"
+                                    columns="auto, auto"
+                                    col="0"
+                                    class="p-15"
+                                    [isUserInteractionEnabled]="!loadingLikeFlag"
+                                    [visibility]="!validateLike(post.sourcePost.likes) ? 'visible' : 'collapsed'"
+                                (tap)="deleteLike(post)">
+                            <Label color="#1e90ff" col="0" verticalAlignment="center" fontSize="20" text="&#xe8dc;" class="material-icons"></Label>
+                            <Label color="#1e90ff" col="1" verticalAlignment="center" fontSize="20" [text]="' ' + post.sourcePost.likes.length"></Label>
+                        </GridLayout>
+                        <GridLayout row="0" col="2">
+
+                        </GridLayout>
+                        <GridLayout class="p-15" row="0" col="3" columns="auto" rows="auto" [visibility]="post.sourcePost.usuario.id === usuario.id ? 'visible' : 'collapsed'">
+                            <Label (tap)="showPostMenu($event, post.sourcePost)" row="0" fontSize="25" verticalAlignment="center" text="&#xe5d4;" class="material-icons"></Label>
+                        </GridLayout>
+                    </GridLayout>
+                </GridLayout>
+
+                <StackLayout class="m-b-5"></StackLayout>
+            </StackLayout>
+        </ng-template>
+        <ng-template tkTemplateKey="small-no-image" tkListItemTemplate let-post="item" class="p-0 m-b-15">
+            <StackLayout>
+                <StackLayout class="m-t-5"></StackLayout>
+                <GridLayout class="list-group-item" rows="*,auto,auto,auto,auto,auto" borderRadius="5" backgroundColor="white" style="padding: 0px;">
+                    <StackLayout row="1" style="padding: 10;">
+                        <GridLayout columns="auto, *">
+                            <Image col="0" class="postProfilePic" stretch="aspectFill" [src]="post.profilePicSanitized"></Image>
+                            <StackLayout class="m-l-5" col="1" rows="auto, auto" verticalAlignment="center">
+                                <Label fontSize="16" row="0" textWrap="true" [text]="post.sourcePost.usuario.primerNombre + ' ' + post.sourcePost.usuario.primerApellido"></Label>
+                                <Label fontSize="14" style="color: gray;" row="1" textWrap="true" [text]="post.fechaPublicacionPost"></Label>
+                            </StackLayout>
+                        </GridLayout>
+                    </StackLayout>
+                    <StackLayout row="2" class="m-t-10"></StackLayout>
+                    <Label fontSize="14" class="p-x-15 p-y-5" row="3" textWrap="true" [text]="post.sourcePost.texto"></Label>
+                    <StackLayout row="4" class="hr-light m-5"></StackLayout>
+                    <GridLayout row="5" rows="auto" columns="auto, *, auto">
+                        <GridLayout row="0"
+                                    columns="auto, auto"
+                                    col="0"
+                                    class="p-15"
+                                    [isUserInteractionEnabled]="!loadingLikeFlag"
+                                    [visibility]="validateLike(post.sourcePost.likes) ? 'visible' : 'collapsed'"
+                                    (tap)="setLike(post)">
+                            <Label color="#a9a9a9" col="0" verticalAlignment="center" fontSize="20" text="&#xe8dc;" class="material-icons"></Label>
+                            <Label color="#a9a9a9" col="1" verticalAlignment="center" fontSize="20" [text]="' ' + post.sourcePost.likes.length"></Label>
+                        </GridLayout>
+                        <GridLayout row="0"
+                                    columns="auto, auto"
+                                    col="0"
+                                    class="p-15"
+                                    [isUserInteractionEnabled]="!loadingLikeFlag"
+                                    [visibility]="!validateLike(post.sourcePost.likes) ? 'visible' : 'collapsed'"
+                                    (tap)="deleteLike(post)">
+                            <Label color="#1e90ff" col="0" verticalAlignment="center" fontSize="20" text="&#xe8dc;" class="material-icons"></Label>
+                            <Label color="#1e90ff" col="1" verticalAlignment="center" fontSize="20" [text]="' ' + post.sourcePost.likes.length"></Label>
+                        </GridLayout>
+                        <GridLayout row="0" col="2">
+
+                        </GridLayout>
+                        <GridLayout class="p-15" row="0" col="3" columns="auto" rows="auto" [visibility]="post.sourcePost.usuario.id === usuario.id ? 'visible' : 'collapsed'">
+                            <Label (tap)="showPostMenu($event, post.sourcePost)" row="0" fontSize="25" verticalAlignment="center" text="&#xe5d4;" class="material-icons"></Label>
+                        </GridLayout>
+                    </GridLayout>
+                </GridLayout>
+
+                <StackLayout class="m-b-5"></StackLayout>
+            </StackLayout>
+        </ng-template>
+    </RadListView>
+</GridLayout>

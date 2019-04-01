@@ -1,0 +1,128 @@
+<ActionBar class="action-bar">
+    <!--
+    Use the NavigationButton as a side-drawer button in Android
+    because ActionItems are shown on the right side of the ActionBar
+    -->
+    <!--<NavigationButton ios:visibility="collapsed" icon="res://menu" (tap)="onDrawerButtonTap()"></NavigationButton>-->
+    <!--
+    Use the ActionItem for IOS with position set to left. Using the
+    NavigationButton as a side-drawer button in iOS is not possible,
+    because its function is to always navigate back in the application.
+    -->
+    <!--<ActionItem icon="res://navigation/menu" android:visibility="collapsed" (tap)="onDrawerButtonTap()"
+                ios.position="left">
+    </ActionItem>-->
+
+    <NavigationButton android.systemIcon="ic_menu_back" (tap)="goBack()"></NavigationButton>
+
+    <GridLayout rows="*" columns="auto, *">
+        <Label col="0"
+               row="0"
+               verticalAlignment="center"
+               textAlignment="center"
+               class="action-bar-title p-l-5"
+               text="Solicitudes"></Label>
+    </GridLayout>
+</ActionBar>
+
+<TabView id="tabViewContainer">
+    <StackLayout *tabItem="{title: 'Recibidas'}">
+        <StackLayout>
+            <RadListView #myRadListSolicitudes
+                         row="2"
+                         class="list-group m-x-0"
+                         selectionBehavior="Press"
+                         (itemSelected)="onItemSelected($event)"
+                         pullToRefresh="true"
+                         (pullToRefreshInitiated)="onPullToRefreshInitiated($event)"
+                         [items]="solicitudesRecibidas">
+                <ng-template tkListItemTemplate let-relacion="item" class="p-0 m-b-2">
+                    <StackLayout class="p-x-0 m-x-0" style="background-color: white">
+                        <StackLayout class="m-t-0"></StackLayout>
+                        <GridLayout class="list-group-item p-x-0 p-y-5" rows="auto" columns="auto, *">
+                            <StackLayout width="85" col="0" row="0" verticalAlignment="center">
+                                <Image class="postProfilePic"
+                                       stretch="aspectFill"
+                                       verticalAlignment="center"
+                                       horizontalAlignment="center"
+                                       style="height: 80; width: 80;"
+                                       [src]="relacion.usuario.profilePic"></Image>
+                            </StackLayout>
+                            <StackLayout row="0" col="1" verticalAlignment="center">
+                                <Label [text]="relacion.usuario.primerNombre + ' ' + relacion.usuario.primerApellido"
+                                       style="padding-left: 8"
+                                       fontSize="16"
+                                       verticalAlignment="center"></Label>
+                                <GridLayout rows="auto" columns="auto, auto, *" verticalAlignment="center">
+                                    <Button row="0"
+                                            col="0"
+                                            verticalAlignment="center"
+                                            style="margin-left: 5"
+                                            width="130"
+                                            text="Aceptar"
+                                            (tap)="acertarSolicitudPanel(relacion)"
+                                            class="btn btn-primary btn-active btn-rounded-lg text-capitalize font-weight-bold"></Button>
+                                    <Button row="0"
+                                            col="1"
+                                            verticalAlignment="center"
+                                            style="margin-left: 5"
+                                            width="130"
+                                            text="Eliminar"
+                                            (tap)="eliminarSolicitudRecibida(relacion)"
+                                            class="btn btn-primary btn-active btn-outline btn-rounded-lg text-capitalize font-weight-bold"></Button>
+                                </GridLayout>
+                            </StackLayout>
+                        </GridLayout>
+                        <StackLayout class="hr-light m-b-0"></StackLayout>
+                    </StackLayout>
+                </ng-template>
+            </RadListView>
+        </StackLayout>
+    </StackLayout>
+
+    <StackLayout *tabItem="{title: 'Enviadas'}">
+        <StackLayout>
+            <RadListView #myRadList1Solicitudes
+                         row="2"
+                         class="list-group m-x-0"
+                         selectionBehavior="Press"
+                         (itemSelected)="onItemSelected1($event)"
+                         pullToRefresh="true"
+                         (pullToRefreshInitiated)="onPullToRefreshInitiated1($event)"
+                         [items]="usuarioSolicitudesEnviadas">
+                <ng-template tkListItemTemplate let-usuario="item" class="p-0 m-b-2">
+                    <StackLayout class="p-x-0 m-x-0" style="background-color: white">
+                        <StackLayout class="m-t-0"></StackLayout>
+                        <GridLayout class="list-group-item p-x-0 p-y-5" rows="auto" columns="auto, *">
+                            <StackLayout width="85" col="0" row="0" verticalAlignment="center">
+                                <Image class="postProfilePic"
+                                       stretch="aspectFill"
+                                       verticalAlignment="center"
+                                       horizontalAlignment="center"
+                                       style="height: 80; width: 80;"
+                                       [src]="usuario.profilePic"></Image>
+                            </StackLayout>
+                            <StackLayout row="0" col="1" verticalAlignment="center">
+                                <Label [text]="usuario.primerNombre + ' ' + usuario.primerApellido"
+                                       style="padding-left: 8"
+                                       fontSize="16"
+                                       verticalAlignment="center"></Label>
+                                <GridLayout rows="auto" columns="auto, *" verticalAlignment="center">
+                                    <Button row="0"
+                                            col="0"
+                                            verticalAlignment="center"
+                                            style="margin-left: 5"
+                                            width="130"
+                                            text="Eliminar"
+                                            (tap)="eliminarSolicitudEnviada(usuario)"
+                                            class="btn btn-primary btn-active btn-outline btn-rounded-lg text-capitalize font-weight-bold"></Button>
+                                </GridLayout>
+                            </StackLayout>
+                        </GridLayout>
+                        <StackLayout class="hr-light m-b-0"></StackLayout>
+                    </StackLayout>
+                </ng-template>
+            </RadListView>
+        </StackLayout>
+    </StackLayout>
+</TabView>

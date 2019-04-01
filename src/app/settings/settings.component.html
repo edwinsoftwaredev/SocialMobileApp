@@ -1,0 +1,51 @@
+<ActionBar class="action-bar">
+    <!-- 
+    Use the NavigationButton as a side-drawer button in Android
+    because ActionItems are shown on the right side of the ActionBar
+    -->
+    <!--<NavigationButton ios:visibility="collapsed" icon="res://menu" (tap)="onDrawerButtonTap()"></NavigationButton>-->
+    <!-- 
+    Use the ActionItem for IOS with position set to left. Using the
+    NavigationButton as a side-drawer button in iOS is not possible,
+    because its function is to always navigate back in the application.
+    -->
+    <!--<ActionItem icon="res://navigation/menu" android:visibility="collapsed" (tap)="onDrawerButtonTap()"
+        ios.position="left">
+    </ActionItem>-->
+
+    <NavigationButton android.systemIcon="ic_menu_back" (tap)="goBack()"></NavigationButton>
+
+    <GridLayout rows="*" columns="auto, *">
+        <Label col="0" verticalAlignment="center" textAlignment="center" class="action-bar-title p-l-5" text="Opciones"></Label>
+    </GridLayout>
+</ActionBar>
+
+<GridLayout class="page page-content" backgroundColor="#d3d3d3">
+    <StackLayout>
+        <StackLayout class="hr-light"></StackLayout>
+        <GridLayout backgroundColor="white"
+                    rows="60"
+                    columns="auto, *"
+                    (tap)="changePassword()">
+            <Label col="0" text="&#xe0da;" color="black" verticalAlignment="center" style="font-size: 20;" class="material-icons p-r-15 p-l-15"></Label>
+            <Label col="1" text="Cambiar Contraseña" color="black" verticalAlignment="center" style="font-size: 20;" class="p-r-10"></Label>
+        </GridLayout>
+        <StackLayout class="hr-light"></StackLayout>
+        <GridLayout backgroundColor="white"
+                    rows="60"
+                    columns="auto, *"
+                    (tap)="disableNotifications()">
+            <Label style="font-size: 20;" color="black" verticalAlignment="center" class="material-icons p-l-15 p-r-15" text="&#xe7f6;" col="0" row="0"></Label>
+            <Label style="font-size: 20;" color="black" verticalAlignment="center" class="p-r-10" text="Deshabilitar Notificaciones" col="1" row="0"></Label>
+        </GridLayout>
+        <StackLayout class="hr-light"></StackLayout>
+        <GridLayout backgroundColor="white"
+                    rows="60"
+                    columns="auto, *"
+                    (tap)="logOut()">
+            <Label col="0" text="&#xe566;" color="black" verticalAlignment="center" style="font-size: 20;" class="material-icons p-r-15 p-l-15"></Label>
+            <Label col="1" text="Cerrar Sesión" color="black" verticalAlignment="center" style="font-size: 20;" class="p-r-10"></Label>
+        </GridLayout>
+        <StackLayout class="hr-light"></StackLayout>
+    </StackLayout>
+</GridLayout>

@@ -1,0 +1,49 @@
+<GridLayout rows="*, auto, *" style="background-color: #3d5afe; color: white;">
+    <StackLayout row="1" class="form m-x-15 p-15" borderRadius="5" style="background-color: white;" *ngIf="mostrarFormulario">
+        <!-- Option 4: An input with a simple border and no label -->
+        <Label style="color: #3d5afe" class="text-center p-b-5 h1" text="Social"></Label>
+        <Label style="color: lightgray;" text="Iniciar Sesión" class="text-center p-b-20 h3"></Label>
+        <TextField [(ngModel)]="username"
+                   hint="User"
+                   class="input input-border m-b-10"
+                   style="color: black;"></TextField>
+        <TextField [(ngModel)]="password"
+                   hint="Password"
+                   secure="true"
+                   class="input input-border m-b-10"
+                   style="color: black;"></TextField>
+
+        <GridLayout columns="*, *" orientation="horizontal" class="m-t-15">
+            <Button col="0"
+                    class="btn btn-outline text-capitalize font-weight-bold"
+                    text="Registrate"
+                    (tap)="onNavItemTap('/registro')"></Button>
+            <!--<Button col="1" class="btn btn-primary btn-active" text="Entrar" (tap)="loginPrueba()"></Button>-->
+            <Button col="1"
+                    class="btn btn-primary btn-active text-capitalize font-weight-bold"
+                    text="Entrar"
+                    (tap)="login()"></Button>
+        </GridLayout>
+
+        <Label *ngIf="authenticationError" style="color: orangered;" class="text-center p-t-5 h3" text="Usuario o Contraseña no son correctos"></Label>
+    </StackLayout>
+
+    <GridLayout rows="auto, *, auto"
+                row="1"
+                class="form m-x-15 p-15"
+                borderRadius="5"
+                style="background-color: white;"
+                *ngIf="!mostrarFormulario">
+
+        <Label verticalAlignment="center"
+               row="1"
+               style="color: #3d5afe"
+               class="text-center p-b-5 h1"
+               text="Social"></Label>
+
+    </GridLayout>
+</GridLayout>
+
+
+
+

@@ -1,0 +1,266 @@
+<ActionBar #actionBar class="action-bar">
+    <!--
+    Use the NavigationButton as a side-drawer button in Android
+    because ActionItems are shown on the right side of the ActionBar
+    -->
+    <!--<NavigationButton ios:visibility="collapsed" icon="res://menu" (tap)="onDrawerButtonTap()"></NavigationButton>-->
+    <!--
+    Use the ActionItem for IOS with position set to left. Using the
+    NavigationButton as a side-drawer button in iOS is not possible,
+    because its function is to always navigate back in the application.
+    -->
+    <!--<ActionItem icon="res://navigation/menu" android:visibility="collapsed" (tap)="onDrawerButtonTap()"
+                ios.position="left">
+    </ActionItem>-->
+
+    <NavigationButton android.systemIcon="ic_menu_back" (tap)="goBack()"></NavigationButton>
+
+    <!--Menu Pop Up para android-->
+    <GridLayout rows="*" columns="auto, *">
+        <Label col="0" verticalAlignment="center" textAlignment="center" class="action-bar-title p-l-5" [text]="usuario.primerNombre + ' ' + usuario.primerApellido"></Label>
+    </GridLayout>
+
+</ActionBar>
+
+<ScrollView #myScroller orientation="vertical">
+    <StackLayout backgroundColor="#d3d3d3">
+        <GridLayout #profileDetsGrid
+                    rows="*"
+                    columns="auto, *"
+                    style="background-color: #14418B;">
+            <Image [src]="usuario.profilePic"
+                   row="0"
+                   col="0"
+                   class="postProfilePic m-20"
+                   stretch="aspectFill"
+                   verticalAlignment="center"
+                   horizontalAlignment="center"
+                   style="height: 90; width: 90;"></Image>
+            <StackLayout *ngIf="usuarioVisitor" row="0" col="1" verticalAlignment="center">
+                <GridLayout *ngIf="!(usuarioVisitor.usuario === usuario.usuario)" rows="auto, auto" columns="auto, *" verticalAlignment="center">
+                    <Label textWrap="true"
+                           fontSize="18"
+                           color="white"
+                           col="0"
+                           verticalAlignment="center"
+                           horizontalAlignment="left"
+                           row="0"
+                           class="text-capitalize font-weight-bold m-l-2"
+                           [text]="usuario.primerNombre + ' ' + usuario.primerApellido"></Label>
+                    <StackLayout *ngIf="!cargandoEstadoRelacion"
+                                 row="1"
+                                 verticalAlignment="center"
+                                 horizontalAlignment="left"
+                                 col="0">
+                        <Button verticalAlignment="center"
+                                horizontalAlignment="left"
+                                width="130"
+                                style="margin-left: 0"
+                                isEnabled="false"
+                                [visibility]="sonAmigos ? 'visible' : 'collapsed'"
+                                text="Son Amigos"
+                                class="btn btn-primary btn-active text-capitalize font-weight-bold"></Button>
+                        <Button verticalAlignment="center"
+                                horizontalAlignment="left"
+                                style="margin-left: 0"
+                                width="130"
+                                isEnabled="false"
+                                [visibility]="usuarioVisitorEnvioSolicitud ? 'visible' : 'collapsed'"
+                                text="Solicitud Enviada"
+                                class="btn btn-primary btn-active text-capitalize font-weight-bold"></Button>
+                        <Button verticalAlignment="center"
+                                horizontalAlignment="left"
+                                style="margin-left: 0"
+                                width="130"
+                                [visibility]="usuarioVisitedEnvioSolicitud ? 'visible' : 'collapsed'"
+                                text="Aceptar Solicitud"
+                                (tap)="aceptarSolicitudBusqueda()"
+                                class="btn btn-primary btn-active text-capitalize font-weight-bold"></Button>
+                        <Button verticalAlignment="center"
+                                horizontalAlignment="left"
+                                style="margin-left: 0"
+                                width="130"
+                                [visibility]="!sonAmigos && !usuarioVisitorEnvioSolicitud && !usuarioVisitedEnvioSolicitud ? 'visible' : 'collapsed'"
+                                text="Enviar Solicitud"
+                                (tap)="enviarSolicitudBusqueda()"
+                                class="btn btn-primary btn-active text-capitalize font-weight-bold"></Button>
+                    </StackLayout>
+                </GridLayout>
+            </StackLayout>
+        </GridLayout>
+
+        <StackLayout backgroundColor="#d3d3d3" sdkExampleTitle sdkToggleNavButton>
+            <SegmentedBar #segmentedBarMenu backgroundColor="white" [items]="items" (selectedIndexChange)="onSelectedIndexChange($event)"></SegmentedBar>
+            <ActivityIndicator [busy]="activityIndicator"
+                               *ngIf="activityIndicator"
+                               [visibility]="activityIndicator ? 'visible' : 'collapsed'"
+                               width="50" height="50"
+                               verticalAlignment="center"
+                               marginTop="80"
+                               style="background-color: lightgray;"
+                               horizontalAlignment="center"
+                               color="#1e90ff"
+                               class="activity-indicator"></ActivityIndicator>
+            <GridLayout rows="{{screenHeight}}" [visibility]="selectedIndex === 0 ? 'visible' : 'collapsed'" backgroundColor="#d3d3d3">
+                <RadListView #postsListView
+                             style="background-color: lightgray;"
+                             (scrolled)="onScrolled($event)"
+                             class="list-group m-x-10"
+                             [items]="fullPosts"
+                             [itemTemplateSelector]="templateSelector"
+                             loadOnDemandMode="Auto"
+                             (loadMoreDataRequested)="onLoadMoreItemsRequested($event)">
+                    <ListViewLinearLayout tkListViewLayout scrollDirection="Vertical" itemInsertAnimation="Slide" itemDeleteAnimation="Slide"></ListViewLinearLayout>
+                    <ng-template tkTemplateKey="big" tkListItemTemplate let-post="item" class="p-0 m-b-15">
+                        <StackLayout>
+                            <StackLayout class="m-t-5"></StackLayout>
+
+                            <GridLayout class="list-group-item" rows="*,auto,auto,auto,auto,auto" borderRadius="5" backgroundColor="white" style="padding: 0px;">
+
+                                <Image row="0"
+                                       borderTopLeftRadius="5"
+                                       borderTopRightRadius="5"
+                                       loadMode="async"
+                                       stretch="aspectFill"
+                                       [src]="post.postImages[0].imageSource"></Image>
+                                <StackLayout row="1" style="padding: 10;">
+                                    <GridLayout columns="auto, *">
+                                        <Image col="0" class="postProfilePic" stretch="aspectFill" [src]="post.profilePicSanitized"></Image>
+                                        <StackLayout class="m-l-5" col="1" rows="auto, auto" verticalAlignment="center">
+                                            <Label fontSize="16" row="0" textWrap="true" [text]="post.sourcePost.usuario.primerNombre + ' ' + post.sourcePost.usuario.primerApellido"></Label>
+                                            <Label fontSize="14" style="color: gray;" row="1" textWrap="true" [text]="post.fechaPublicacionPost"></Label>
+                                        </StackLayout>
+                                    </GridLayout>
+                                </StackLayout>
+                                <StackLayout row="2" class="m-t-10"></StackLayout>
+                                <Label fontSize="14" class="p-x-15 p-y-5" row="3" textWrap="true" [text]="post.sourcePost.texto"></Label>
+                                <StackLayout row="4" class="hr-light m-5"></StackLayout>
+                                <GridLayout row="5" rows="auto" columns="auto, *, auto">
+                                    <GridLayout row="0"
+                                                columns="auto, auto"
+                                                col="0"
+                                                class="p-15"
+                                                [isUserInteractionEnabled]="sonAmigos && !loadingLikeFlag"
+                                                [visibility]="validateLike(post.sourcePost.likes) ? 'visible' : 'collapsed'"
+                                                (tap)="setLike(post)">
+                                        <Label color="#a9a9a9" col="0" verticalAlignment="center" fontSize="20" text="&#xe8dc;" class="material-icons"></Label>
+                                        <Label color="#a9a9a9" col="1" verticalAlignment="center" fontSize="20" [text]="' ' + post.sourcePost.likes.length"></Label>
+                                    </GridLayout>
+                                    <GridLayout row="0"
+                                                columns="auto, auto"
+                                                col="0"
+                                                class="p-15"
+                                                [isUserInteractionEnabled]="sonAmigos && !loadingLikeFlag"
+                                                [visibility]="!validateLike(post.sourcePost.likes) ? 'visible' : 'collapsed'"
+                                                (tap)="deleteLike(post)">
+                                        <Label color="#1e90ff" col="0" verticalAlignment="center" fontSize="20" text="&#xe8dc;" class="material-icons"></Label>
+                                        <Label color="#1e90ff" col="1" verticalAlignment="center" fontSize="20" [text]="' ' + post.sourcePost.likes.length"></Label>
+                                    </GridLayout>
+                                    <!--<GridLayout row="0" col="2">
+
+                                    </GridLayout>
+                                    <GridLayout class="p-15" row="0" col="3" columns="auto" rows="auto" [visibility]="post.sourcePost.usuario.id === usuario.id ? 'visible' : 'collapsed'">
+                                        <Label (tap)="showPostMenu($event, post.sourcePost)" row="0" fontSize="25" verticalAlignment="center" text="&#xe5d4;" class="material-icons"></Label>
+                                    </GridLayout>-->
+                                </GridLayout>
+                            </GridLayout>
+
+                            <StackLayout class="m-b-5"></StackLayout>
+                        </StackLayout>
+                    </ng-template>
+                    <ng-template tkTemplateKey="small-no-image" tkListItemTemplate let-post="item" class="p-0 m-b-15">
+                        <StackLayout>
+                            <StackLayout class="m-t-5"></StackLayout>
+                            <GridLayout class="list-group-item" rows="*,auto,auto,auto,auto,auto" borderRadius="5" backgroundColor="white" style="padding: 0px;">
+                                <StackLayout row="1" style="padding: 10;">
+                                    <GridLayout columns="auto, *">
+                                        <Image col="0" class="postProfilePic" stretch="aspectFill" [src]="post.profilePicSanitized"></Image>
+                                        <StackLayout class="m-l-5" col="1" rows="auto, auto" verticalAlignment="center">
+                                            <Label fontSize="16" row="0" textWrap="true" [text]="post.sourcePost.usuario.primerNombre + ' ' + post.sourcePost.usuario.primerApellido"></Label>
+                                            <Label fontSize="14" style="color: gray;" row="1" textWrap="true" [text]="post.fechaPublicacionPost"></Label>
+                                        </StackLayout>
+                                    </GridLayout>
+                                </StackLayout>
+                                <StackLayout row="2" class="m-t-10"></StackLayout>
+                                <Label fontSize="14" class="p-x-15 p-y-5" row="3" textWrap="true" [text]="post.sourcePost.texto"></Label>
+                                <StackLayout row="4" class="hr-light m-5"></StackLayout>
+                                <GridLayout row="5" rows="auto" columns="auto, *, auto">
+                                    <GridLayout row="0"
+                                                columns="auto, auto"
+                                                col="0"
+                                                class="p-15"
+                                                [isUserInteractionEnabled]="sonAmigos && !loadingLikeFlag"
+                                                [visibility]="validateLike(post.sourcePost.likes) ? 'visible' : 'collapsed'"
+                                                (tap)="setLike(post)">
+                                        <Label color="#a9a9a9" col="0" verticalAlignment="center" fontSize="20" text="&#xe8dc;" class="material-icons"></Label>
+                                        <Label color="#a9a9a9" col="1" verticalAlignment="center" fontSize="20" [text]="' ' + post.sourcePost.likes.length"></Label>
+                                    </GridLayout>
+                                    <GridLayout row="0"
+                                                columns="auto, auto"
+                                                col="0"
+                                                class="p-15"
+                                                [isUserInteractionEnabled]="sonAmigos && !loadingLikeFlag"
+                                                [visibility]="!validateLike(post.sourcePost.likes) ? 'visible' : 'collapsed'"
+                                                (tap)="deleteLike(post)">
+                                        <Label color="#1e90ff" col="0" verticalAlignment="center" fontSize="20" text="&#xe8dc;" class="material-icons"></Label>
+                                        <Label color="#1e90ff" col="1" verticalAlignment="center" fontSize="20" [text]="' ' + post.sourcePost.likes.length"></Label>
+                                    </GridLayout>
+                                    <!--<GridLayout row="0" col="2">
+
+                                    </GridLayout>
+                                    <GridLayout class="p-15" row="0" col="3" columns="auto" rows="auto" [visibility]="post.sourcePost.usuario.id === usuario.id ? 'visible' : 'collapsed'">
+                                        <Label (tap)="showPostMenu($event, post.sourcePost)" row="0" fontSize="25" verticalAlignment="center" text="&#xe5d4;" class="material-icons"></Label>
+                                    </GridLayout>-->
+                                </GridLayout>
+                            </GridLayout>
+
+                            <StackLayout class="m-b-5"></StackLayout>
+                        </StackLayout>
+                    </ng-template>
+                </RadListView>
+            </GridLayout>
+
+            <GridLayout [visibility]="selectedIndex === 1 ? 'visible' : 'collapsed'"
+                        rows="{{screenHeight}}"
+                        backgroundColor="#d3d3d3">
+
+                <ActivityIndicator [busy]="spinnerFlag"
+                                   *ngIf="spinnerFlag"
+                                   [visibility]="spinnerFlag ? 'visible' : 'collapsed'"
+                                   width="50" height="50"
+                                   class="activity-indicator"></ActivityIndicator>
+
+                <RadListView class="list-group m-x-0"
+                             (scrolled)="onScrolled($event)"
+                             style="background-color: white;"
+                             #myRadList
+                             selectionBehavior="Press"
+                             (itemSelected)="onItemSelected($event)"
+                             [items]="myItems">
+                    <ListViewLinearLayout tkListViewLayout scrollDirection="Vertical" itemInsertAnimation="Slide" itemDeleteAnimation="Slide"></ListViewLinearLayout>
+                    <ng-template tkListItemTemplate let-amigo="item" class="p-0 m-b-2">
+                        <StackLayout class="p-x-0 m-x-0" style="background-color: white">
+                            <GridLayout class="list-group-item p-x-0 p-y-5" rows="auto" columns="auto, *">
+                                <StackLayout width="85" col="0" row="0" verticalAlignment="center">
+                                    <Image class="postProfilePic"
+                                           stretch="aspectFill"
+                                           verticalAlignment="center"
+                                           horizontalAlignment="center"
+                                           style="height: 80; width: 80;"
+                                           [src]="amigo.profilePic"></Image>
+                                </StackLayout>
+                                <StackLayout row="0" col="1" verticalAlignment="center">
+                                    <Label [text]="amigo.primerNombre + ' '+ amigo.primerApellido"
+                                           style="padding-left: 8"
+                                           fontSize="16"
+                                           verticalAlignment="center"></Label>
+                                </StackLayout>
+                            </GridLayout>
+                            <StackLayout class="hr-light m-b-0"></StackLayout>
+                        </StackLayout>
+                    </ng-template>
+                </RadListView>
+            </GridLayout>
+        </StackLayout>
+    </StackLayout>
+</ScrollView>

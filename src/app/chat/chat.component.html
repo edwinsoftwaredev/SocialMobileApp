@@ -1,0 +1,107 @@
+<ActionBar class="action-bar">
+    <!--
+    Use the NavigationButton as a side-drawer button in Android
+    because ActionItems are shown on the right side of the ActionBar
+    -->
+    <!--<NavigationButton ios:visibility="collapsed" icon="res://menu" (tap)="onDrawerButtonTap()"></NavigationButton>-->
+    <!--
+    Use the ActionItem for IOS with position set to left. Using the
+    NavigationButton as a side-drawer button in iOS is not possible,
+    because its function is to always navigate back in the application.
+    -->
+    <!--<ActionItem icon="res://navigation/menu"
+                android:visibility="collapsed"
+                (tap)="onDrawerButtonTap()"
+                ios.position="left">
+    </ActionItem>-->
+
+    <NavigationButton android.systemIcon="ic_menu_back" (tap)="goBack()"></NavigationButton>
+
+    <!--Menu Pop Up para android-->
+    <GridLayout row="0" col="1" rows="auto" columns="auto, auto, *">
+        <Image class="postProfilePic"
+               row="0"
+               col="0"
+               stretch="aspectFill"
+               verticalAlignment="center"
+               horizontalAlignment="center"
+               style="height: 48; width: 48;"
+               [src]="usuarioConectado.profilePic"></Image>
+        <label row="0"
+               col="1"
+               verticalAlignment="center"
+               fontSize="16"
+               class="text-capitalize font-weight-bold p-l-5"
+               [text]="usuarioConectado.primerNombre + ' ' + usuarioConectado.primerApellido"></label>
+    </GridLayout>
+</ActionBar>
+
+<GridLayout rows="*, auto" columns="*" backgroundColor="#d3d3d3">
+    <ActivityIndicator [busy]="mensajes.length === 0 && masMensajes && cargandoMensajes"
+                       width="30" height="30"
+                       class="activity-indicator p-b-30"></ActivityIndicator>
+    <ListView #mensajesListView [items]="mensajes" row="0" col="0" class="list-group" separatorColor="#d3d3d3">
+        <ng-template let-msg="item" let-i="index" let-odd="odd" let-even="even">
+            <StackLayout style="padding: 3 8 3 8; margin: 3 8 3 8;">
+                <StackLayout *ngIf="masMensajes && !cargandoMensajes && i === 0">
+                    <Button width="45%"
+                            style="font-size: 12"
+                            (tap)="cargarMensajesAnteriores()"
+                            class="btn btn-primary btn-active btn-rounded-lg text-capitalize font-weight-bold"
+                            text="Cargar Mesajes Anteriores"></Button>
+                </StackLayout>
+                <ActivityIndicator [busy]="cargandoMensajes && !masMensajes"
+                                   *ngIf="cargandoMensajes && !masMensajes && i === 0"
+                                   width="20" height="20"
+                                   class="activity-indicator p-b-30"></ActivityIndicator>
+                <StackLayout class="list-group-item"
+                             [ngClass]="{'pull-left': msg.from.usuario === usuarioConectado.usuario, 'pull-right': msg.to === usuarioConectado.usuario}"
+                             padding="0"
+                             margin="0">
+
+                    <StackLayout class="m-t-15" *ngIf="msg.from.usuario === msg.to">
+                        <Label horizontalAlignment="center" verticalAlignment="center" [text]="msg.text" fontSize="12" class="text-capitalize font-weight-bold"></Label>
+                    </StackLayout>
+
+                    <StackLayout width="85%"
+                                 orientation="horizontal"
+                                 [ngClass]="{'pull-right': msg.to === usuarioConectado.usuario}"
+                                 *ngIf="msg.from.usuario !== msg.to">
+
+                        <Image class="postProfilePic m-r-8"
+                               stretch="aspectFill"
+                               *ngIf="msg.from.usuario !== usuarioActual.usuario"
+                               verticalAlignment="top"
+                               horizontalAlignment="center"
+                               style="height: 45; width: 45; margin-right: 5; background-color: lightgray;"
+                               [src]="msg.from.profilePic"></Image>
+
+                        <Label  fontSize="16"
+                                [ngClass]="{'msgEnviado': msg.to === usuarioConectado.usuario, 'msgRecibido': msg.to !== usuarioConectado.usuario}"
+                                borderRadius="10"
+                                verticalAlignment="center"
+                                color="black"
+                                textWrap="true"
+                                class="body p-10"
+                                [text]="msg.text"></Label>
+
+                    </StackLayout>
+                </StackLayout>
+            </StackLayout>
+        </ng-template>
+    </ListView>
+    <GridLayout class="form p-5" backgroundColor="#f5f5f5" row="1" col="0" columns="*, auto">
+        <TextField col="0" [(ngModel)]="msgInput"
+                   backgroundColor="white"
+                   #myTextField
+                   (focus)="onFocus($event)"
+                   (blur)="onBlur($event)"
+                   class="input input-border"></TextField>
+        <Button text="&#xe163;"
+                width="36"
+                col="1"
+                style="font-size: 24; margin-left: 5; margin-right: 5;"
+                (tap)="sendMsg()"
+                class="material-icons btn btn-rounded-lg font-weight-bold"></Button>
+    </GridLayout>
+</GridLayout>
