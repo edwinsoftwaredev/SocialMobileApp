@@ -13,3 +13,4 @@ Aplicación de red social desarrollada con NativeScript - Angular, con las sigui
 
 Esta aplicación esta basada en el desarrollo de la aplicación web del mismo proyecto.
 https://github.com/edwinsoftwaredev/SocialWebApp
+
